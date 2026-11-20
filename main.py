@@ -1,10 +1,14 @@
 import requests
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
-url = 'https://midas.minsal.cl/farmacia_v2/WS/getLocalesTurnos.php'
-
-respuesta = requests.get(url)
-farmacias = respuesta.json()
-
-for famarcia in farmacias:
-    if famarcia["comuna_nombre"] == "INDEPENDENCIA":
-        print(famarcia["local_nombre"],famarcia["local_direccion"],famarcia["comuna_nombre"])
+api_url = "https://api.weatherapi.com/v1/current.json"
+api_key = f"?key={ os.getenv("weather_api_token") }"
+ciudad = "&q=Santiago"
+try:
+    res = requests.get(api_url+api_key+ciudad, timeout=10)
+    data = res.json()
+    print(data)
+except requests.exceptions.Timeout:
+    print("Timeout")
